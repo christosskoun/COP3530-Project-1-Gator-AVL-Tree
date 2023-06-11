@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 
 add_executable(Project_1_Gator_AVL_Project
-        AVL_Tree.h
-        main.cpp)
+        src/AVL_Tree.h
+        src/main.cpp)
