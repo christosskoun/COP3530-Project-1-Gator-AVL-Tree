@@ -25,3 +25,6 @@ TEST_CASE("BST Insert", "[flag]"){
 
 	REQUIRE(1 == 1);
 }*/
+
+
+    //TODO need help understanding how to use this (wil terminal??)

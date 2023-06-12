@@ -23,7 +23,7 @@ struct TreeNode{
     void printPostorder();
     void printLevelCount();
     void removeInorder(unsigned int n);
-
+//TODO need a "traverse" function???? (would be forced to traverse entire tree so O(n)
 };
 
 
