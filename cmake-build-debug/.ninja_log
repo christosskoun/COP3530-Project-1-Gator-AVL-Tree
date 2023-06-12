@@ -1,0 +1,10 @@
+# ninja log v5
+1	288	7082362540255702	CMakeFiles/Project_1_Gator_AVL_Project.dir/src/main.cpp.obj	8ca4196523439772
+291	415	7082362541485911	Project_1_Gator_AVL_Project.exe	95a3747c004f2e05
+2	339	7082424927893363	CMakeFiles/Project_1_Gator_AVL_Project.dir/src/main.cpp.obj	8ca4196523439772
+3	45	7082425136031482	CMakeFiles/Project_1_Gator_AVL_Project.dir/test-unit/test.cpp.obj	4af5add89412a394
+46	145	7082425136999837	Project_1_Gator_AVL_Project.exe	6d5edf385d2dc5fc
+3	292	7082425390424715	CMakeFiles/Project_1_Gator_AVL_Project.dir/src/main.cpp.obj	8ca4196523439772
+293	383	7082425391309870	Project_1_Gator_AVL_Project.exe	6d5edf385d2dc5fc
+2	288	7082425785413987	CMakeFiles/Project_1_Gator_AVL_Project.dir/src/main.cpp.obj	8ca4196523439772
+288	380	7082425786304149	Project_1_Gator_AVL_Project.exe	6d5edf385d2dc5fc

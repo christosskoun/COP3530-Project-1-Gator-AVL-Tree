@@ -7,4 +7,4 @@ include_directories(.)
 
 add_executable(Project_1_Gator_AVL_Project
         src/AVL_Tree.h
-        src/main.cpp)
+        src/main.cpp test-unit/test.cpp)

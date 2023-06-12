@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "Project_1_Gator_AVL_Project::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Project_1_Gator_AVL_Project-Debug-8967014b51ddfd1ab85e.json",
+					"jsonFile" : "target-Project_1_Gator_AVL_Project-Debug-801fe8d368054f44b36c.json",
 					"name" : "Project_1_Gator_AVL_Project",
 					"projectIndex" : 0
 				}
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/Christos/CLionProjects/COP3503CProjects/Project-1-Gator-AVL-Project/cmake-build-debug",
-		"source" : "C:/Users/Christos/CLionProjects/COP3503CProjects/Project-1-Gator-AVL-Project"
+		"build" : "C:/Users/Christos/CLionProjects/COP3530 Projects/Project-1-Gator-AVL-Project/cmake-build-debug",
+		"source" : "C:/Users/Christos/CLionProjects/COP3530 Projects/Project-1-Gator-AVL-Project"
 	},
 	"version" : 
 	{
