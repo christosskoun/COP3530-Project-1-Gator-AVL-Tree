@@ -7,28 +7,29 @@
 	2. You will submit this main.cpp file and any header files you have on Gradescope. 
 */
 
+bool verifyName(const std::string& name) {
 
-std:: string verifyWord(std::istringstream& wordStream) {
-
-    //read in the next word
-    std::string word;
-    wordStream >> word;
-
-    if (word.length() > 20)
-        return "";
-
-    //make sure each character is a-z, A-Z, or 0-9
-    for (char c: word) {
+    //make sure each character is a-z or A-Z
+    for (char c: name) {
         if (!isalpha(c) && !isdigit(c))
-            return "";
+            return false;
     }
-    return word;
+    return true;
+}
+
+bool verifyID(int ID) {
+    int digitCount = 0;
+    while (ID > 0) {
+        ID /= 10; //floor division for is did 4/10, would yield "0"
+        digitCount++;
+    }
+    return digitCount < 8;
 }
 
 int main(){
     short operationCount;
     std::cin>>operationCount;
-    new TreeNode;//TODO don't think I did this correctly
+    AVLTree::TreeNode GatorAVLTree(0);//Created a Tree Node with a value of 0 (Default constructor)
 
     while(operationCount>=0) {
 
@@ -44,57 +45,109 @@ int main(){
         lineStream >> command;
 
         if (command=="insert"){
-            TreeNode::insert();
+            std::string name;
+            std::string strID;
+            int ID;
 
+            //read up to the first quotation mark
+            getline(lineStream, name, '"');
+
+            //read up to the last quotation mark (so just saves "name" with no quotation marks)
+            getline(lineStream, name, '"');
+
+            //last of stream should just be the ID
+            getline(lineStream, strID);
+            ID=stoi(strID);//convert to integer
+
+            if(verifyName(name)&& verifyID(ID)) {
+                GatorAVLTree.insert(name, ID);
+                std::cout << "successful";
+            }
+            else
+                std::cout<<"unsuccessful";
         }
 
         else if (command=="remove"){
-            TreeNode::remove();
+            std::string strID;
+            int ID;
 
+            //last of stream should just be the ID
+            getline(lineStream, strID);
+            ID=stoi(strID);//convert to integer
+
+            if(verifyID(ID)) {
+                GatorAVLTree.remove(ID);
+                std::cout << "successful";
+            }
+            else
+                std::cout<<"unsuccessful";
         }
 
         else if (command=="search"){
-            TreeNode::search();
+            std::string strID;
+            int ID;
 
+            //last of stream should just be the ID
+            getline(lineStream, strID);
+
+            //if the search is for a GatorID
+            try {
+                ID = stoi(strID);//convert to integer
+                GatorAVLTree.search(ID);
+            }
+
+            //if the search is for a name and not a GatorID
+            catch(...){
+            std::string name;
+
+            //read up to the first quotation mark
+            getline(lineStream, name, '"');
+
+            //read up to the last quotation mark (so just saves "name" with no quotation marks)
+            getline(lineStream, name, '"');
+
+            GatorAVLTree.search(name);
+            //TODO if found, print name
+            // if not found print "unsuccessful"
+            }
         }
 
         else if (command=="printInorder"){
-            TreeNode::search();
+            GatorAVLTree.printInorder();
 
         }
 
         else if (command=="printPreorder"){
-            TreeNode::printPreorder();
+            GatorAVLTree.printPreorder();
 
         }
 
         else if (command=="printPostorder"){
-            TreeNode::printPostorder();
+            GatorAVLTree.printPostorder();
 
         }
 
         else if (command=="printLevelCount"){
-            TreeNode::printLevelCount();
+            GatorAVLTree.printLevelCount();
 
         }
 
         else if (command=="removeInorder"){
-            TreeNode::removeInorder();
+            std::string str_n;
+            int n;
 
+            getline(lineStream, str_n);
+            n=stoi(str_n);//convert to integer
+
+            GatorAVLTree.removeInorder(n);
+            //TODO if found, print "successful"
+            // if not found print "unsuccessful"
         }
-
+        else
+            std::cout<<"unsuccessful";
 
         operationCount--;//decrement operationCount as we just completed 1 operation
     }
 
 	return 0;
 }
-
-
-
-/*
-        //read up to the next quotation mark
-        std::string next;
-        getline(lineStream, next, '"');
-*/
-
