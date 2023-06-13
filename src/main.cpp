@@ -23,13 +23,13 @@ bool verifyID(int ID) {
         ID /= 10; //floor division for is did 4/10, would yield "0"
         digitCount++;
     }
-    return digitCount < 8;
+    return digitCount == 8;
 }
 
 int main(){
     short operationCount;
     std::cin>>operationCount;
-    AVLTree::TreeNode GatorAVLTree(0);//Created a Tree Node with a value of 0 (Default constructor)
+    AVLTree GatorAVLTree;//Created a Tree (Default constructor)
 
     while(operationCount>=0) {
 
@@ -143,8 +143,8 @@ int main(){
             //TODO if found, print "successful"
             // if not found print "unsuccessful"
         }
-        else
-            std::cout<<"unsuccessful";
+/*        else
+            std::cout<<"unsuccessful";*/
 
         operationCount--;//decrement operationCount as we just completed 1 operation
     }
