@@ -61,10 +61,10 @@ int main(){
 
             if(verifyName(name)&& verifyID(ID)) {
                 GatorAVLTree.insert(name, ID);
-                std::cout << "successful";
+                std::cout << "successful"<<std::endl;
             }
             else
-                std::cout<<"unsuccessful";
+                std::cout<<"unsuccessful"<<std::endl;
         }
 
         else if (command=="remove"){
@@ -77,10 +77,10 @@ int main(){
 
             if(verifyID(ID)) {
                 GatorAVLTree.remove(ID);
-                std::cout << "successful";
+                std::cout << "successful"<<std::endl;
             }
             else
-                std::cout<<"unsuccessful";
+                std::cout<<"unsuccessful"<<std::endl;
         }
 
         else if (command=="search"){
