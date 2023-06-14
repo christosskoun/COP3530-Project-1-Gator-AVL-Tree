@@ -49,7 +49,7 @@ struct AVLTree {
     void printLevelCountHelper();
 
     void removeInorder(int n);
-
+    void removeInorderHelper(int n, int& count, TreeNode* node);
 };
 
 int AVLTree::getHeight(AVLTree::TreeNode *node) {
@@ -166,24 +166,37 @@ void AVLTree::remove(int ID) {
         this->root=removeHelper(this->root, ID);
 }
 
-AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, int ID) {//TODO fix this (account for how many children)
-    if (node == nullptr) //base case for recursion
-        delete node;
+AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, int ID) {
+    if(ID == node->ID&&ID==this->root->ID){//base case for recursion
+        delete node; //and nothing else will happen because duplicate IDs are not allowed!
+        node= nullptr;
+        this->root= nullptr;//and nothing else will happen because duplicate IDs are not allowed!
+        std::cout << "successful" << std::endl;
+    }
 
-    else if (ID==node->ID)
-        std::cout<<"unsuccessful"<<std::endl; //and nothing else will happen because duplicate IDs are not allowed!
+    else if (ID == node->ID&&ID!=this->root->ID) {//base case for recursion
+        delete node; //and nothing else will happen because duplicate IDs are not allowed!
+        node= nullptr;
 
-    else if(ID<node->ID)
-        node->left= removeHelper(node->left, ID);
 
-    else if (ID>node->ID)
-        node->right= removeHelper(node->right, ID);
 
-    node->height=std::max(getHeight(node->left), getHeight(node->right))+1;
+        //TODO fix this (account for how many children)
 
-    this->ratio= getHeight(this->root->left)- getHeight(this->root->right);
+        std::cout << "successful" << std::endl;
+    }
+    else if (ID < node->ID)
+        node->left = removeHelper(node->left, ID);
 
-    node=rotations(node);
+    else if (ID > node->ID)
+        node->right = removeHelper(node->right, ID);
+
+    if(node!= nullptr)
+        node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
+
+    if (this->root != nullptr) {
+        this->ratio = getHeight(this->root->left) - getHeight(this->root->right);
+        node = rotations(node);
+    }
 
     return node;
 }
@@ -277,9 +290,34 @@ void AVLTree::printLevelCount() {
     //Prints 0 if the head of the tree is null. For example, the tree in Fig. 1 has 4 levels.
 }
 
+void AVLTree::printLevelCountHelper() {
+
+}
+
+
 void AVLTree::removeInorder(int n) {
+    if (this->root == nullptr)
+        std::cout << "unsuccessful" << std::endl;
+
+    int count=0;
+    removeInorderHelper(n,count, this->root);
+
     //Remove the Nth GatorID from the inorder traversal of the tree (N = 0 for the first item, etc).
     //If removal is successful, print “successful”.
     //[Optional: Balance the tree automatically if necessary. We will test your code only on cases where the tree will be balanced before and after the deletion. So you can implement a BST deletion and still get full credit]
     //If the Nth GatorID does not exist within the tree, print “unsuccessful”.
+
+
+}
+
+
+void AVLTree::removeInorderHelper(int n, int &count, TreeNode* node) {
+
+    count++;
+    removeInorderHelper(n,count,node->left);
+
+        std::cout << node->name;
+
+
+    removeInorderHelper(n, count,node->right);
 }
