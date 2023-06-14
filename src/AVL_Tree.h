@@ -17,7 +17,6 @@ struct AVLTree {
     AVLTree() : root(nullptr), ratio(0.0) {} //constructor
 
     int getHeight(AVLTree::TreeNode* node);
-    TreeNode* updateHeights(TreeNode* node);
 
     //Helper functions to keep tree Balanced (AKA rotation functions)
     TreeNode* rotateLeft(TreeNode* node); //O(1)
@@ -38,12 +37,16 @@ struct AVLTree {
     void search(std::string name); //searches for a Node with a specific name
 
     void printInorder();
+    void printInorderHelper(TreeNode* node, bool& isFirstNode);
 
     void printPreorder();
+    void printPreorderHelper(TreeNode* node, bool& isFirstNode);
 
     void printPostorder();
+    void printPostorderHelper(TreeNode* node, bool& isFirstNode);
 
     void printLevelCount();
+    void printLevelCountHelper();
 
     void removeInorder(int n);
 
@@ -53,18 +56,6 @@ int AVLTree::getHeight(AVLTree::TreeNode *node) {
     if (node == nullptr)
         return -1;
     return node->height;
-}
-
-AVLTree::TreeNode *AVLTree::updateHeights(AVLTree::TreeNode *node) {
-    if (node == nullptr)
-        return nullptr;
-
-    node->left = updateHeights(node->left);   // Update height of the left subtree recursively
-    node->right = updateHeights(node->right); // Update height of the right subtree recursively
-
-    node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1; // Update height of the current node
-
-    return node;
 }
 
 AVLTree::TreeNode* AVLTree::rotateLeft(TreeNode *node) {//right-right case
@@ -93,29 +84,41 @@ AVLTree::TreeNode *AVLTree::rotateRL(TreeNode *node) {//right-left case
     return rotateLeft(node);
 }
 
-AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {//TODO fix this and update ratio
+AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {
     if (ratio == -2) { // Tree is "right-heavy"
         if (getHeight(node->right->left) - getHeight(node->right->right) ==1) { // Right subtree is "left-heavy"
             node = rotateRL(node);
-            node->right = updateHeights(node->right); // Update height of the right subtree
+            node->left->height--;
+            node->height++;
+
+            //update heights
+            node->height++;
+            node->right--;
+            node->left-=2;
         }
         else if (getHeight(node->right->left) - getHeight(node->right->right) ==-1) {
             node = rotateLeft(node);
-            node->right = updateHeights(node->right); // Update height of the right subtree
-        }
 
+            //update heights
+            node->left->height-=2;
+        }
     }
     else if (ratio == 2) { // Tree is "left-heavy"
         if (getHeight(node->left->left) - getHeight(node->left->right) ==-1) { // Left subtree is "right-heavy"
             node = rotateLR(node);
-            node->left = updateHeights(node->left); // Update height of the left subtree
+
+            //update heights
+            node->height++;
+            node->left->height--;
+            node->right-=2;
         }
         else if(getHeight(node->left->left) - getHeight(node->left->right) ==1) {
             node = rotateRight(node);
-            node->left = updateHeights(node->left); // Update height of the left subtree
+
+            //update heights
+            node->right-=2;
         }
     }
-
 
     node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1; // Update height of the current node
 
@@ -124,16 +127,20 @@ AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {//TODO fix this 
     return node;
 }
 
-void AVLTree::insert(std::string name, int ID) { //TODO fix this
-    if (this->root== nullptr)
-        this->root=new TreeNode(name,ID);
+void AVLTree::insert(std::string name, int ID) {
+    if (this->root== nullptr) {
+        std::cout<<"successful"<<std::endl;
+        this->root = new TreeNode(name, ID);
+    }
     else
         this->root=insertHelper(this->root, name, ID);
 }
 
-AVLTree::TreeNode * AVLTree::insertHelper(AVLTree::TreeNode* node, std::string name, int ID) {//TODO fix this
-    if (node == nullptr)//base case for recursion
-        return node=new TreeNode(name,ID);
+AVLTree::TreeNode * AVLTree::insertHelper(AVLTree::TreeNode* node, std::string name, int ID) {
+    if (node == nullptr) {//base case for recursion
+        std::cout<<"successful"<<std::endl;
+        return node = new TreeNode(name, ID);
+    }
 
     else if (ID==node->ID)
         std::cout<<"unsuccessful"<<std::endl; //and nothing else will happen because duplicate IDs are not allowed!
@@ -197,18 +204,72 @@ void AVLTree::search(std::string name) {
 }
 
 void AVLTree::printInorder() {
-    //Print out a comma separated inorder traversal of the names in the tree.
+    bool isFirstNode = true;
+    printInorderHelper(this->root, isFirstNode);
+    std::cout << std::endl; //so next input is placed on the next line
+}
 
+void AVLTree::printInorderHelper(TreeNode* node, bool& isFirstNode) {
+    if (node == nullptr)
+        return;
+
+    printInorderHelper(node->left, isFirstNode);
+
+    if (isFirstNode) {//can't do last node because we don't know when that'll be so we do formatting based off of if it's the first node
+        std::cout << node->name;
+        isFirstNode = false;
+    }
+
+    else
+        std::cout << ", " << node->name;
+
+    printInorderHelper(node->right, isFirstNode);
 }
 
 void AVLTree::printPreorder() {
-    //Print out a comma separated preorder traversal of the names in the tree.
+    bool isFirstNode = true;
+    printPreorderHelper(this->root, isFirstNode);
+    std::cout << std::endl; //so next input is placed on the next line
+}
 
+void AVLTree::printPreorderHelper(TreeNode *node, bool &isFirstNode) {
+    if (node == nullptr)
+        return;
+
+    if (isFirstNode) {//can't do last node because we don't know when that'll be so we do formatting based off of if it's the first node
+        std::cout << node->name;
+        isFirstNode = false;
+    }
+
+    else
+        std::cout << ", " << node->name;
+
+    printPreorderHelper(node->left, isFirstNode);
+
+    printPreorderHelper(node->right, isFirstNode);
 }
 
 void AVLTree::printPostorder() {
-    //Print out a comma separated postorder traversal of the names in the tree.
+    bool isFirstNode = true;
+    printPostorderHelper(this->root, isFirstNode);
+    std::cout << std::endl; //so next input is placed on the next line
+}
 
+void AVLTree::printPostorderHelper(TreeNode *node, bool &isFirstNode) {
+    if (node == nullptr)
+        return;
+
+    printPostorderHelper(node->left, isFirstNode);
+
+    printPostorderHelper(node->right, isFirstNode);
+
+    if (isFirstNode) {//can't do last node because we don't know when that'll be so we do formatting based off of if it's the first node
+        std::cout << node->name;
+        isFirstNode = false;
+    }
+
+    else
+        std::cout << ", " << node->name;
 }
 
 void AVLTree::printLevelCount() {

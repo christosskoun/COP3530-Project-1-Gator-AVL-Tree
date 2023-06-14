@@ -30,6 +30,7 @@ int main(){
     short operationCount;
     std::cin>>operationCount;
     AVLTree GatorAVLTree;//Created a Tree (Default constructor)
+    std::cin.ignore(); //basically ignores the /n as a cin and is ready for "currLine" later to just include the 2nd line
 
     while(operationCount>=0) {
 
@@ -59,12 +60,13 @@ int main(){
             getline(lineStream, strID);
             ID=stoi(strID);//convert to integer
 
-            if(verifyName(name)&& verifyID(ID)) {
+            if(verifyName(name)&& verifyID(ID))
                 GatorAVLTree.insert(name, ID);
-                std::cout << "successful"<<std::endl;
-            }
+
             else
                 std::cout<<"unsuccessful"<<std::endl;
+
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
 
         else if (command=="remove"){
@@ -81,6 +83,8 @@ int main(){
             }
             else
                 std::cout<<"unsuccessful"<<std::endl;
+
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
 
         else if (command=="search"){
@@ -109,27 +113,30 @@ int main(){
             GatorAVLTree.search(name);
             //TODO if found, print name
             // if not found print "unsuccessful"
+
+
+            operationCount--;//decrement operationCount as we just completed 1 operation
             }
         }
 
         else if (command=="printInorder"){
             GatorAVLTree.printInorder();
-
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
 
         else if (command=="printPreorder"){
             GatorAVLTree.printPreorder();
-
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
 
         else if (command=="printPostorder"){
             GatorAVLTree.printPostorder();
-
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
 
         else if (command=="printLevelCount"){
             GatorAVLTree.printLevelCount();
-
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
 
         else if (command=="removeInorder"){
@@ -142,12 +149,12 @@ int main(){
             GatorAVLTree.removeInorder(n);
             //TODO if found, print "successful"
             // if not found print "unsuccessful"
+
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
-/*        else
-            std::cout<<"unsuccessful";*/
 
-        operationCount--;//decrement operationCount as we just completed 1 operation
+        else //will execute if not a valid command
+            std::cout<<"unsuccessful"<<std::endl;
     }
-
 	return 0;
 }

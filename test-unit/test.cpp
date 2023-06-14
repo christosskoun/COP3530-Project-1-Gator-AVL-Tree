@@ -3,6 +3,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
+
 */
 /*
 	To check output (At the Project1 directory):
@@ -10,21 +11,22 @@
 *//*
 
 
+
 TEST_CASE("BST Insert", "[flag]"){
-	*/
-/*
-		MyAVLTree tree;   // Create a Tree object 
-		tree.insert(3);
-		tree.insert(2);
-		tree.insert(1);
+
+
+		AVLTree GatorAVLTree;   // Create a Tree object
+        GatorAVLTree.insert("one", 11111111);
+        GatorAVLTree.insert("two", 22222222);
+        GatorAVLTree.insert("three", 33333333);
 		std::vector<int> actualOutput = tree.inorder();
 		std::vector<int> expectedOutput = {1, 2, 3};
 		REQUIRE(expectedOutput.size() == actualOutput.size());
 		REQUIRE(actualOutput == expectedOutput);
-	*//*
+
 
 	REQUIRE(1 == 1);
-}*/
+}
 
 
-    //TODO need help understanding how to use this (wil terminal??)
+    //TODO need help understanding how to use this (wil terminal??)*/
