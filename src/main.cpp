@@ -79,7 +79,13 @@ int main(){
 
             if(verifyID(ID)) {
                 GatorAVLTree.remove(ID);
-                std::cout << "successful"<<std::endl;
+
+                //if tree is not empty, update balanceFactor and do rotations
+                if (GatorAVLTree.root != nullptr) {
+                    GatorAVLTree.ratio = GatorAVLTree.getHeight(GatorAVLTree.root->left) - GatorAVLTree.getHeight(GatorAVLTree.root->right);
+                    GatorAVLTree.root = GatorAVLTree.rotations(GatorAVLTree.root);
+                }
+
             }
             else
                 std::cout<<"unsuccessful"<<std::endl;
@@ -153,8 +159,10 @@ int main(){
             operationCount--;//decrement operationCount as we just completed 1 operation
         }
 
-        else //will execute if not a valid command
+        else{ //will execute if not a valid command
             std::cout<<"unsuccessful"<<std::endl;
+            break;
+        }
     }
 	return 0;
 }

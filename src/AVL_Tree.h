@@ -164,41 +164,104 @@ void AVLTree::remove(int ID) {
         std::cout<<"unsuccessful"<<std::endl; //can't remove if nothing there
     else
         this->root=removeHelper(this->root, ID);
+
 }
 
 AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, int ID) {
-    if(ID == node->ID&&ID==this->root->ID){//base case for recursion
-        delete node; //and nothing else will happen because duplicate IDs are not allowed!
-        node= nullptr;
-        this->root= nullptr;//and nothing else will happen because duplicate IDs are not allowed!
+    if (node->ID == ID) {//special case where you are removing the root of the tree
+        delete node;
+        node = nullptr;
         std::cout << "successful" << std::endl;
     }
 
-    else if (ID == node->ID&&ID!=this->root->ID) {//base case for recursion
-        delete node; //and nothing else will happen because duplicate IDs are not allowed!
-        node= nullptr;
+    if (ID == node->right->ID || ID == node->left->ID) {//base case for recursion (one of the children is the node that must be removed)
 
+        if (node->right->ID == ID) {//the parent's right node is the one to delete
 
+            //if tree node has no children
+            if (node->right->right == nullptr && node->right->left == nullptr) {
+                delete node->right;
+                node->right = nullptr;
+                std::cout << "successful" << std::endl;
+            }
+                //else 1 child
+            else if (node->right->right != nullptr ||node->right->left!= nullptr) {
+                if (node->right->right != nullptr) {//the one child is on the right of the node
+                    TreeNode* tempNode=node->right->right;
+                    delete node->right;
+                    node->right = tempNode;
+                    std::cout << "successful" << std::endl;
+                }
+                else if (node->right->left != nullptr) {//the one child is on the left of the node
+                    TreeNode* tempNode=node->right->left;
+                    delete node->right;
+                    node->right = tempNode;
+                    std::cout << "successful" << std::endl;
+                }
+            }
+                //else 2 childs
+            else if (node->right->right != nullptr&&node->right->left!= nullptr) {
+                //find inorder successor
+                if(node->right->right->left== nullptr){//if node-to-delete's right node doesn't have a left, then that right node is the successor
+                    TreeNode* tempNode=node->right->right;
+                    delete node->right;
+                    node->right = tempNode;
+                    std::cout << "successful" << std::endl;
+                }
+                else{//must find left-most node on right subtree
 
-        //TODO fix this (account for how many children)
+                }
+            }
+        }
 
-        std::cout << "successful" << std::endl;
+        else if (node->left->ID == ID) {//the parent's left node is the one to delete
+
+            //if tree node has no children
+            if (node->left->right == nullptr && node->left->left == nullptr) {
+                delete node->left;
+                node->left = nullptr;
+                std::cout << "successful" << std::endl;
+            }
+                //else 1 child
+            else if (node->left->right != nullptr ||node->left->left!= nullptr) {
+                if (node->left->right != nullptr) {//the one child is on the right of the node
+                    TreeNode* tempNode=node->left->right;
+                    delete node->left;
+                    node->left = tempNode;
+                    std::cout << "successful" << std::endl;
+                }
+                else if (node->left->left != nullptr) {//the one child is on the left of the node
+                    TreeNode* tempNode=node->left->left;
+                    delete node->left;
+                    node->left = tempNode;
+                    std::cout << "successful" << std::endl;
+                }
+            }
+                //else 2 childs
+            else if (node->left->right != nullptr&&node->left->left!= nullptr) {
+                //find inorder successor
+                if(node->left->right->left== nullptr){//if node-to-delete's left node doesn't have a left, then that right node is the successor
+                    TreeNode* tempNode=node->left->right;
+                    delete node->left;
+                    node->left = tempNode;
+                    std::cout << "successful" << std::endl;
+                }
+                else{//must find left-most node on right subtree
+
+                }
+            }
+        }
+
+        else if (ID < node->ID)
+            node->left = removeHelper(node->left, ID);
+
+        else if (ID > node->ID)
+            node->right = removeHelper(node->right, ID);
+
+        if (node != nullptr)
+            node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
+
     }
-    else if (ID < node->ID)
-        node->left = removeHelper(node->left, ID);
-
-    else if (ID > node->ID)
-        node->right = removeHelper(node->right, ID);
-
-    if(node!= nullptr)
-        node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
-
-    if (this->root != nullptr) {
-        this->ratio = getHeight(this->root->left) - getHeight(this->root->right);
-        node = rotations(node);
-    }
-
-    return node;
 }
 
 void AVLTree::search(int ID) {
@@ -294,7 +357,6 @@ void AVLTree::printLevelCountHelper() {
 
 }
 
-
 void AVLTree::removeInorder(int n) {
     if (this->root == nullptr)
         std::cout << "unsuccessful" << std::endl;
@@ -309,7 +371,6 @@ void AVLTree::removeInorder(int n) {
 
 
 }
-
 
 void AVLTree::removeInorderHelper(int n, int &count, TreeNode* node) {
 
