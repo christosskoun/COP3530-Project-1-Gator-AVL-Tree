@@ -28,7 +28,7 @@ int main(){
     AVLTree GatorAVLTree;//Created a Tree (Default constructor)
     std::cin.ignore(); //basically ignores the /n as a cin and is ready for "currLine" later to just include the 2nd line
 
-    while(operationCount>=0) {
+    while(operationCount>0) {
 
         //reading one line of input from cin
         std::string currLine;
@@ -92,36 +92,22 @@ int main(){
         }
 
         else if (command=="search"){
-            std::string ID;
+            std::string name_or_ID;
 
             // Ignore leading whitespace in the lineStream
             lineStream >> std::ws;
 
-            //last of stream should just be the ID
-            getline(lineStream, ID);
+            //last of stream should just be the string
+            getline(lineStream, name_or_ID);
 
-            //if the search is for a GatorID
-            try {
-                GatorAVLTree.search(ID);
-            }
+            // Remove surrounding quotes if they exist
+            if (name_or_ID.front() == '"' && name_or_ID.back() == '"')
+                name_or_ID = name_or_ID.substr(1, name_or_ID.size() - 2); //-2 bc one is to get rid of last quote and the other is because we start counting at 0 not 1, so this is just to get to the correct spot
 
-            //if the search is for a name and not a GatorID
-            catch(...){
-            std::string name;
-
-            //read up to the first quotation mark
-            getline(lineStream, name, '"');
-
-            //read up to the last quotation mark (so just saves "name" with no quotation marks)
-            getline(lineStream, name, '"');
-
-            GatorAVLTree.search(name);
-            //TODO if found, print name
-            // if not found print "unsuccessful"
-
+            GatorAVLTree.search(name_or_ID);
 
             operationCount--;//decrement operationCount as we just completed 1 operation
-            }
+
         }
 
         else if (command=="printInorder"){

@@ -31,8 +31,8 @@ struct AVLTree {
     void remove(std::string ID);
     TreeNode * removeHelper(TreeNode* root, std::string ID);
 
-
     void search(std::string name_or_ID); //searches for a Node with a specific ID/Name
+    TreeNode* searchHelper(TreeNode* node, std::string name_or_ID);
 
     void printInorder();
     void printInorderHelper(TreeNode* node, bool& isFirstNode);
@@ -295,27 +295,56 @@ AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, std::string I
     else if (ID > node->ID)
         node->right = removeHelper(node->right, ID);
 
-    if (node != nullptr)//todo not sure if this is right
+    if (node != nullptr)
         node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
 }
 
-
-
-
-
 void AVLTree::search(std::string name_or_ID) {
+    searchHelper(this->root, name_or_ID);
+}
 
-    //Search for the student with the specified ID from the tree.
-    //If the ID was found, print out their NAME.
-    //If the ID does not exist within the tree, print “unsuccessful”.
+AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string name_or_ID) {
+    int numTester;
+    bool found=false;
 
+    //in the special case where the tree is empty
+    if (node == nullptr) {
+        std::cout << "unsuccessful" << std::endl;
+        return nullptr;
+    }
 
-    //traverse tree
-    //Search for the student with the specified name, NAME in the tree.
-    //If the student name was found, print the associated ID.
-    //If the tree has more than one object with the same NAME, print each ID on a new line with no other spaces and in the same relative order as a pre-order traversal.
-    //If the name does not exist within the tree, print “unsuccessful”.
-    //NAME identifier will be surrounded by double quotes for parsing, e.g. "Josh Smith".
+    // If this goes through, the parameter passed in was for a Gator ID
+    try {
+        numTester = std::stoi(name_or_ID);
+
+        if (node->ID == name_or_ID){
+            std::cout<<node->name<<std::endl;
+            found=true;
+        }
+
+        if (name_or_ID < node->ID)
+            return searchHelper(node->left, name_or_ID);
+
+        else if (name_or_ID > node->ID)
+            return searchHelper(node->right, name_or_ID);
+    }
+
+    // The idea is if this catches, then the parameter passed in was for a name
+    catch (...) {
+        if (node->name == name_or_ID){
+            std::cout<<node->ID<<std::endl;
+            found= true;
+        }
+
+        //longer average time complexity for searching with name because have to attempt to search whole BST
+        else{
+            searchHelper(node->left, name_or_ID);
+            searchHelper(node->right, name_or_ID);        }
+        }
+
+    //will always be looked at end of recursion
+    if (!found)
+        std::cout<<"unsuccessful"<<std::endl;
 }
 
 void AVLTree::printInorder() {
