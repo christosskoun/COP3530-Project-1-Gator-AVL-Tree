@@ -17,14 +17,10 @@ bool verifyName(const std::string& name) {
     return true;
 }
 
-bool verifyID(int ID) {
-    int digitCount = 0;
-    while (ID > 0) {
-        ID /= 10; //floor division for is did 4/10, would yield "0"
-        digitCount++;
-    }
-    return digitCount == 8;
+bool verifyID(std::string ID){
+    return (ID.length() == 8);
 }
+
 
 int main(){
     short operationCount;
@@ -47,8 +43,7 @@ int main(){
 
         if (command=="insert"){
             std::string name;
-            std::string strID;
-            int ID;
+            std::string ID;
 
             //read up to the first quotation mark
             getline(lineStream, name, '"');
@@ -56,9 +51,11 @@ int main(){
             //read up to the last quotation mark (so just saves "name" with no quotation marks)
             getline(lineStream, name, '"');
 
+            // Ignore leading whitespace in the lineStream
+            lineStream >> std::ws;
+
             //last of stream should just be the ID
-            getline(lineStream, strID);
-            ID=stoi(strID);//convert to integer
+            getline(lineStream, ID);
 
             if(verifyName(name)&& verifyID(ID))
                 GatorAVLTree.insert(name, ID);
@@ -70,12 +67,13 @@ int main(){
         }
 
         else if (command=="remove"){
-            std::string strID;
-            int ID;
+            std::string ID;
+
+            // Ignore leading whitespace in the lineStream
+            lineStream >> std::ws;
 
             //last of stream should just be the ID
-            getline(lineStream, strID);
-            ID=stoi(strID);//convert to integer
+            getline(lineStream, ID);
 
             if(verifyID(ID)) {
                 GatorAVLTree.remove(ID);
@@ -94,15 +92,16 @@ int main(){
         }
 
         else if (command=="search"){
-            std::string strID;
-            int ID;
+            std::string ID;
+
+            // Ignore leading whitespace in the lineStream
+            lineStream >> std::ws;
 
             //last of stream should just be the ID
-            getline(lineStream, strID);
+            getline(lineStream, ID);
 
             //if the search is for a GatorID
             try {
-                ID = stoi(strID);//convert to integer
                 GatorAVLTree.search(ID);
             }
 
