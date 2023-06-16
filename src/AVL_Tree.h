@@ -32,7 +32,7 @@ struct AVLTree {
     TreeNode * removeHelper(TreeNode* root, std::string ID);
 
     void search(std::string name_or_ID); //searches for a Node with a specific ID/Name
-    TreeNode* searchHelper(TreeNode* node, std::string name_or_ID);
+    TreeNode* searchHelper(TreeNode* node, std::string name_or_ID, bool& found);
 
     void printInorder();
     void printInorderHelper(TreeNode* node, bool& isFirstNode);
@@ -108,13 +108,13 @@ AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {
             //update heights
             node->height++;
             node->left->height--;
-            node->right-=2;
+            node->right->height-=2;
         }
         else if(getHeight(node->left->left) - getHeight(node->left->right) ==1) {
             node = rotateRight(node);
 
             //update heights
-            node->right-=2;
+            node->right->height-=2;
         }
     }
 
@@ -137,7 +137,7 @@ void AVLTree::insert(std::string name, std::string ID) {
 AVLTree::TreeNode * AVLTree::insertHelper(AVLTree::TreeNode* node, std::string name, std::string ID) {
     if (node == nullptr) {//base case for recursion
         std::cout<<"successful"<<std::endl;
-        return node = new TreeNode(name, ID);
+        node = new TreeNode(name, ID);
     }
 
     else if (ID==node->ID)
@@ -300,12 +300,12 @@ AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, std::string I
 }
 
 void AVLTree::search(std::string name_or_ID) {
-    searchHelper(this->root, name_or_ID);
+    bool found= false;
+    searchHelper(this->root, name_or_ID, found);
 }
 
-AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string name_or_ID) {
+AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string name_or_ID, bool& found) {
     int numTester;
-    bool found=false;
 
     //in the special case where the tree is empty
     if (node == nullptr) {
@@ -320,13 +320,14 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
         if (node->ID == name_or_ID){
             std::cout<<node->name<<std::endl;
             found=true;
+            return nullptr;
         }
 
         if (name_or_ID < node->ID)
-            return searchHelper(node->left, name_or_ID);
+            return searchHelper(node->left, name_or_ID, found); //return statement so "unsuccessful does not print multiple times (we assume no duplicate ideas for this code)
 
         else if (name_or_ID > node->ID)
-            return searchHelper(node->right, name_or_ID);
+            return searchHelper(node->right, name_or_ID, found); //return statement so "unsuccessful does not print multiple times (we assume no duplicate ideas for this code)
     }
 
     // The idea is if this catches, then the parameter passed in was for a name
@@ -334,13 +335,17 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
         if (node->name == name_or_ID){
             std::cout<<node->ID<<std::endl;
             found= true;
+            return nullptr;
         }
 
         //longer average time complexity for searching with name because have to attempt to search whole BST
         else{
-            searchHelper(node->left, name_or_ID);
-            searchHelper(node->right, name_or_ID);        }
+            if (node->left!= nullptr)
+                searchHelper(node->left, name_or_ID, found);
+            if (node->right!= nullptr)
+                searchHelper(node->right, name_or_ID, found);
         }
+    }
 
     //will always be looked at end of recursion
     if (!found)
@@ -436,8 +441,6 @@ void AVLTree::removeInorder(int n) {
     //If removal is successful, print “successful”.
     //[Optional: Balance the tree automatically if necessary. We will test your code only on cases where the tree will be balanced before and after the deletion. So you can implement a BST deletion and still get full credit]
     //If the Nth GatorID does not exist within the tree, print “unsuccessful”.
-
-
 }
 
 void AVLTree::removeInorderHelper(int n, int &count, TreeNode* node) {
