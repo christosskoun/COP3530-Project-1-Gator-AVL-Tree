@@ -21,7 +21,6 @@ bool verifyID(std::string ID){
     return (ID.length() == 8);
 }
 
-
 int main(){
     short operationCount;
     std::cin>>operationCount;
@@ -83,8 +82,8 @@ int main(){
                     GatorAVLTree.ratio = GatorAVLTree.getHeight(GatorAVLTree.root->left) - GatorAVLTree.getHeight(GatorAVLTree.root->right);
                     GatorAVLTree.root = GatorAVLTree.rotations(GatorAVLTree.root);
                 }
-
             }
+
             else
                 std::cout<<"unsuccessful"<<std::endl;
 
@@ -138,8 +137,6 @@ int main(){
             n=stoi(str_n);//convert to integer
 
             GatorAVLTree.removeInorder(n);
-            //TODO if found, print "successful"
-            // if not found print "unsuccessful"
 
             operationCount--;//decrement operationCount as we just completed 1 operation
         }
