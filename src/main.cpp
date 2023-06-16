@@ -1,11 +1,11 @@
-#include <iostream>
+/*#include <iostream>
 #include <sstream>
 #include "AVL_Tree.h"
 
-/* Note:
-	1. You will have to comment main() when unit testing your code because catch uses its own main().
-	2. You will submit this main.cpp file and any header files you have on Gradescope.
-*/
+// Note:
+	//1. You will have to comment main() when unit testing your code because catch uses its own main().
+	//2. You will submit this main.cpp file and any header files you have on Gradescope.
+
 
 bool verifyName(const std::string& name) {
 
@@ -147,4 +147,4 @@ int main(){
         }
     }
 	return 0;
-}
+}*/

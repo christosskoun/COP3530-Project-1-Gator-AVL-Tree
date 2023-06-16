@@ -269,8 +269,10 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
     }
 
     //will always be looked at end of recursion
-    if (!found)
-        std::cout<<"unsuccessful"<<std::endl;
+    if (!found) {
+        std::cout << "unsuccessful" << std::endl;
+        return nullptr;
+    }
 }
 
 void AVLTree::printInorder() {
