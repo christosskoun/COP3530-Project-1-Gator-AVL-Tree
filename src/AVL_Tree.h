@@ -24,7 +24,7 @@ struct AVLTree {
     TreeNode* rotateRight(TreeNode* node); //O(1)
     TreeNode* rotateLR(TreeNode* node); //O(1)
     TreeNode* rotateRL(TreeNode* node); //O(1)
-    TreeNode* rotations(TreeNode* node);
+    TreeNode* rotations(TreeNode* node); //O(1)
 
     void insert(std::string name, std::string ID);
     TreeNode * insertHelper(TreeNode* root, std::string name, std::string ID);
@@ -115,7 +115,6 @@ AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {
             node->right->height-=2;
         }
     }
-
 
     node->balanceFactor= getHeight(node->left)- getHeight(node->right);
 
