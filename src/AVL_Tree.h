@@ -8,13 +8,14 @@ struct AVLTree {
         int height;
         TreeNode *left;
         TreeNode *right;
-        TreeNode(std::string userName, std::string userID) :  name(userName), ID(userID), left(nullptr), right(nullptr), height(0) {} //constructor
+        int balanceFactor;
+        TreeNode(std::string userName, std::string userID) :  name(userName), ID(userID), left(nullptr), right(nullptr), height(0),balanceFactor(0) {} //constructor
     };
 
     TreeNode* root;
-    float ratio;
+    int size;
 
-    AVLTree() : root(nullptr), ratio(0.0) {} //constructor
+    AVLTree() : root(nullptr), size(0) {} //constructor
 
     int getHeight(AVLTree::TreeNode* node);
 
@@ -82,16 +83,14 @@ AVLTree::TreeNode *AVLTree::rotateRL(TreeNode *node) {//right-left case
 }
 
 AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {
-    if (ratio == -2) { // Tree is "right-heavy"
+    if (node->balanceFactor == -2) { // Tree is "right-heavy"
         if (getHeight(node->right->left) - getHeight(node->right->right) ==1) { // Right subtree is "left-heavy"
             node = rotateRL(node);
-            node->left->height--;
-            node->height++;
 
             //update heights
             node->height++;
-            node->right--;
-            node->left-=2;
+            node->right->height--;
+            node->left->height-=2;
         }
         else if (getHeight(node->right->left) - getHeight(node->right->right) ==-1) {
             node = rotateLeft(node);
@@ -100,7 +99,7 @@ AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {
             node->left->height-=2;
         }
     }
-    else if (ratio == 2) { // Tree is "left-heavy"
+    else if (node->balanceFactor == 2) { // Tree is "left-heavy"
         if (getHeight(node->left->left) - getHeight(node->left->right) ==-1) { // Left subtree is "right-heavy"
             node = rotateLR(node);
 
@@ -117,9 +116,8 @@ AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {
         }
     }
 
-    node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1; // Update height of the current node
 
-    this->ratio= getHeight(this->root->left)- getHeight(this->root->right);
+    node->balanceFactor= getHeight(node->left)- getHeight(node->right);
 
     return node;
 }
@@ -127,6 +125,7 @@ AVLTree::TreeNode* AVLTree::rotations(AVLTree::TreeNode* node) {
 void AVLTree::insert(std::string name, std::string ID) {
     if (this->root== nullptr) {
         this->root = new TreeNode(name, ID);
+        this->size++;
         std::cout<<"successful"<<std::endl;
     }
     else
@@ -136,6 +135,7 @@ void AVLTree::insert(std::string name, std::string ID) {
 AVLTree::TreeNode * AVLTree::insertHelper(AVLTree::TreeNode* node, std::string name, std::string ID) {
     if (node == nullptr) {//base case for recursion
         std::cout<<"successful"<<std::endl;
+        this->size++;
         node = new TreeNode(name, ID);
     }
 
@@ -150,14 +150,14 @@ AVLTree::TreeNode * AVLTree::insertHelper(AVLTree::TreeNode* node, std::string n
 
     node->height=std::max(getHeight(node->left), getHeight(node->right))+1;
 
-    this->ratio= getHeight(this->root->left)- getHeight(this->root->right);
+    node->balanceFactor= getHeight(node->left)- getHeight(node->right);
     node=rotations(node);
 
     return node;
 }
 
 void AVLTree::remove(std::string ID) {
-    removeHelper(this->root, ID);
+    this->root=removeHelper(this->root, ID);
 }
 
 AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, std::string ID) {
@@ -181,6 +181,7 @@ AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, std::string I
         //if tree node has no children
         if (node->right == nullptr && node->left == nullptr) {
             delete node;
+            this->size--;
             std::cout << "successful" << std::endl;
             return nullptr;
         }
@@ -203,6 +204,7 @@ AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, std::string I
             TreeNode* tempNode=node->right;
             delete node;
             node = tempNode;
+            this->size--;
             std::cout << "successful" << std::endl;
             return node;
         }
@@ -211,28 +213,36 @@ AVLTree::TreeNode * AVLTree::removeHelper(AVLTree::TreeNode* node, std::string I
             TreeNode* tempNode=node->left;
             delete node;
             node = tempNode;
+            this->size--;
             std::cout << "successful" << std::endl;
             return node;
         }
     }
 
-    node->height = std::max(getHeight(node->left), getHeight(node->right)) + 1;
+    node->height=std::max(getHeight(node->left), getHeight(node->right))+1;
+
+    node->balanceFactor= getHeight(node->left)- getHeight(node->right);
+    node=rotations(node);
+
     return node;
 }
 
 void AVLTree::search(std::string name_or_ID) {
     bool found= false;
     searchHelper(this->root, name_or_ID, found);
+
+    //will always be looked at end of recursion
+    if (!found)
+        std::cout << "unsuccessful" << std::endl;
 }
 
 AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string name_or_ID, bool& found) {
-    int numTester;
+    int numTester; //used just temporarily to see if the input was an ID or a name
 
     //in the special case where the tree is empty
-    if (node == nullptr) {
-        std::cout << "unsuccessful" << std::endl;
+    if (node == nullptr)
         return nullptr;
-    }
+
 
     // If this goes through, the parameter passed in was for a Gator ID
     try {
@@ -245,10 +255,10 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
         }
 
         if (name_or_ID < node->ID)
-            return searchHelper(node->left, name_or_ID, found); //return statement so "unsuccessful does not print multiple times (we assume no duplicate ideas for this code)
+            searchHelper(node->left, name_or_ID, found);
 
         else if (name_or_ID > node->ID)
-            return searchHelper(node->right, name_or_ID, found); //return statement so "unsuccessful does not print multiple times (we assume no duplicate ideas for this code)
+            searchHelper(node->right, name_or_ID, found);
     }
 
     // The idea is if this catches, then the parameter passed in was for a name
@@ -266,12 +276,6 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
             if (node->right!= nullptr)
                 searchHelper(node->right, name_or_ID, found);
         }
-    }
-
-    //will always be looked at end of recursion
-    if (!found) {
-        std::cout << "unsuccessful" << std::endl;
-        return nullptr;
     }
 }
 
@@ -354,12 +358,14 @@ void AVLTree::printLevelCount() {
 }
 
 void AVLTree::removeInorder(int n) {
-    int count = -1; //because first node should be indexed at "0"
 
-    if (this->root == nullptr){
+    if(n>size||this->root == nullptr) { //we passed the target so the user asked to remove something that doesn't exist
         std::cout << "unsuccessful" << std::endl;
         return;
     }
+
+    int count = -1; //because first node should be indexed at "0"
+
     removeInorderHelper(n,count, this->root);
 }
 
@@ -372,11 +378,6 @@ void AVLTree::removeInorderHelper(int n, int &count, TreeNode* node) {
 
     if (n==count) {
         remove(node->ID); //no need to print "successful" because remove() will do it automatically
-        return;
-    }
-
-    if(count>n) { //we passed the target so the user asked to remove something that doesn't exist
-        std::cout << "unsuccessful" << std::endl;
         return;
     }
 

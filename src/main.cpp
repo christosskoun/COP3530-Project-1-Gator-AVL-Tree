@@ -1,4 +1,4 @@
-/*#include <iostream>
+#include <iostream>
 #include <sstream>
 #include "AVL_Tree.h"
 
@@ -18,7 +18,14 @@ bool verifyName(const std::string& name) {
 }
 
 bool verifyID(std::string ID){
-    return (ID.length() == 8);
+    try{
+        int temp;
+        temp=stoi(ID);
+        return (ID.length() == 8);
+    }
+    catch(...) {
+        return false; //would occur is the passed in ID is not all numbers
+    }
 }
 
 int main(){
@@ -74,15 +81,8 @@ int main(){
             //last of stream should just be the ID
             getline(lineStream, ID);
 
-            if(verifyID(ID)) {
+            if(verifyID(ID))
                 GatorAVLTree.remove(ID);
-
-                //if tree is not empty, update balanceFactor and do rotations
-                if (GatorAVLTree.root != nullptr) {
-                    GatorAVLTree.ratio = GatorAVLTree.getHeight(GatorAVLTree.root->left) - GatorAVLTree.getHeight(GatorAVLTree.root->right);
-                    GatorAVLTree.root = GatorAVLTree.rotations(GatorAVLTree.root);
-                }
-            }
 
             else
                 std::cout<<"unsuccessful"<<std::endl;
@@ -143,8 +143,8 @@ int main(){
 
         else{ //will execute if not a valid command
             std::cout<<"unsuccessful"<<std::endl;
-            break;
+            operationCount--;//decrement operationCount as we just completed 1 operation
         }
     }
 	return 0;
-}*/
+}
