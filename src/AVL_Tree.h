@@ -242,7 +242,6 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
     if (node == nullptr)
         return nullptr;
 
-
     // If this goes through, the parameter passed in was for a Gator ID
     try {
         numTester = std::stoi(name_or_ID);
