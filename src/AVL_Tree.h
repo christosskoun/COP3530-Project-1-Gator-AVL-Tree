@@ -242,7 +242,7 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
     if (node == nullptr)
         return nullptr;
 
-    // If this goes through, the parameter passed in was for a Gator ID
+    // If this goes through, the parameter passed in was for a Gator ID /Worst Case: O(logn)
     try {
         numTester = std::stoi(name_or_ID);
 
@@ -264,18 +264,16 @@ AVLTree::TreeNode* AVLTree::searchHelper(AVLTree::TreeNode* node, std::string na
         if (node->name == name_or_ID){
             std::cout<<node->ID<<std::endl;
             found= true;
-            return nullptr;
         }
 
-        //longer average time complexity for searching with name because have to attempt to search whole BST
-        else{
-            if (node->left!= nullptr)
-                searchHelper(node->left, name_or_ID, found);
-            if (node->right!= nullptr)
-                searchHelper(node->right, name_or_ID, found);
-        }
+        //longer worst case time complexity for searching with name because have to traverse the whole BST O(n)
+        if (node->left!= nullptr)
+            searchHelper(node->left, name_or_ID, found);
+        if (node->right!= nullptr)
+            searchHelper(node->right, name_or_ID, found);
     }
 }
+
 
 void AVLTree::printInorder() {
     bool isFirstNode = true;

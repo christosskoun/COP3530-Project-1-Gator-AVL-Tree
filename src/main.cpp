@@ -8,9 +8,9 @@
 
 bool verifyName(const std::string& name) {
 
-    //make sure each character is a-z or A-Z
+    //make sure each character is a-z or A-Z or a space
     for (char c: name) {
-        if (!isalpha(c) && !isdigit(c))
+        if (!isalpha(c) && !isdigit(c)&&c!=' ')
             return false;
     }
     return true;

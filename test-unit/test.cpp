@@ -1,4 +1,3 @@
-#include "../src/main.cpp"
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include <src/AVL_Tree.h>
@@ -267,6 +266,62 @@ TEST_CASE("Hard Insert with remove and printPostorder as well as printPreorder",
                                  "three, one, zero, two, seven, five, four, six, nine, eight\n"
                                  "successful\n"
                                  "zero, two, four, six, five, eight, nine, seven, three\n";
+
+    // Compare the actual and expected outputs
+    REQUIRE(expectedOutput.size() == actualOutput.size());
+    REQUIRE(actualOutput == expectedOutput);
+
+    REQUIRE(1 == 1);
+}
+
+TEST_CASE("Test 8 from Gradescope", "[6]"){
+
+    // Redirect cout to a file
+    std::ofstream outputFile("output.txt");
+    std::streambuf* coutBuffer = std::cout.rdbuf();
+    std::cout.rdbuf(outputFile.rdbuf());
+
+    AVLTree GatorAVLTree;   // Create a Tree object
+    GatorAVLTree.insert("A", "55555555");
+    GatorAVLTree.insert("B", "33333333");
+    GatorAVLTree.insert("C", "77777777");
+    GatorAVLTree.insert("D", "11111111");
+    GatorAVLTree.insert("E", "44444444");
+    GatorAVLTree.insert("F", "66666666");
+    GatorAVLTree.insert("A", "88888888");
+    GatorAVLTree.insert("A", "99999999");
+
+
+    // Call the search() function
+    GatorAVLTree.search("D");
+    GatorAVLTree.search("F");
+    GatorAVLTree.search("A");
+
+    // Restore cout's original buffer
+    std::cout.rdbuf(coutBuffer);
+    outputFile.close();
+
+    // Open the generated output file
+    std::ifstream generatedFile("output.txt");
+
+    // Read the contents of the generated output file
+    std::string actualOutput((std::istreambuf_iterator<char>(generatedFile)),
+                             std::istreambuf_iterator<char>());
+
+    // Define the expected output
+    std::string expectedOutput = "successful\n"
+                                 "successful\n"
+                                 "successful\n"
+                                 "successful\n"
+                                 "successful\n"
+                                 "successful\n"
+                                 "successful\n"
+                                 "successful\n"
+                                 "11111111\n"
+                                 "66666666\n"
+                                 "55555555\n"
+                                 "88888888\n"
+                                 "99999999\n";
 
     // Compare the actual and expected outputs
     REQUIRE(expectedOutput.size() == actualOutput.size());
