@@ -2,9 +2,8 @@
 #include <sstream>
 #include "AVL_Tree.h"
 
-// Note:
-	//1. You will have to comment main() when unit testing your code because catch uses its own main().
-	//2. You will submit this main.cpp file and any header files you have on Gradescope.
+/*Note:
+	You have to comment main() when unit testing code because catch uses its own main().*/
 
 bool verifyName(const std::string& name) {
 
@@ -20,10 +19,10 @@ bool verifyID(std::string ID){
     try{
         int temp;
         temp=stoi(ID);
-        return (ID.length() == 8);
+        return (ID.length() == 8); //would occur is the passed in ID is ALL numbers
     }
-    catch(...) {
-        return false; //would occur is the passed in ID is not all numbers
+    catch(...) { //would occur is the passed in ID is not all numbers
+        return false;
     }
 }
 
